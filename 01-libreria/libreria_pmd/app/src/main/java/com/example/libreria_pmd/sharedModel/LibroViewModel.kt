@@ -103,6 +103,7 @@ class LibroViewModel() : ViewModel() {
         // creamos la instacia
         var libro:Libro = Libro(titulo,inPublicacion, inPrecio)
         _listaLibros.value += libro
+        onSuccess()
     }
 }
 
