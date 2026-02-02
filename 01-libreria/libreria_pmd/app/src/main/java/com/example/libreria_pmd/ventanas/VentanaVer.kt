@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,23 +39,13 @@ import com.example.libreria.ui.shared.LibroViewModel
 import com.example.libreria_pmd.MyLog
 
 
-
-// Define anchos fijos por columna (ajústalos a tu gusto/maqueta)
-private val TITLE_WIDTH = 90.dp
-private val AUTHOR_WIDTH = 90.dp
-private val YEAR_WIDTH = 70.dp
-private val ACTIONS_WIDTH = 96.dp   // suficiente para dos IconButton
-private val ROW_HORIZONTAL_PADDING = 8.dp
-private val ROW_VERTICAL_PADDING = 12.dp
-
-
 @Composable
 fun VentanaVer(
     navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: LibroViewModel
 ) {
-    val libros by viewModel.listaLibros.collectAsState()
+    val libros = viewModel.listaLibros
 
     val uiScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -80,115 +71,9 @@ fun VentanaVer(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(16.dp)
         ) {
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = ROW_HORIZONTAL_PADDING,
-                            vertical = ROW_VERTICAL_PADDING
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Título",
-                        modifier = Modifier.width(TITLE_WIDTH),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = "Precio",
-                        modifier = Modifier.width(AUTHOR_WIDTH),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = "Año",
-                        modifier = Modifier.width(YEAR_WIDTH),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center
-                    )
-                    Row(
-                        modifier = Modifier.width(ACTIONS_WIDTH),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Text(
-                            text = "Acciones",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
-                }
-            }
-
-            // Carga de filas y funciones eliminar y editar
-
             items(libros) { libro ->
-                LibroItem(
-                    libro = libro,
-                    onInfoClick = { }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun LibroItem(
-    libro: Libro,
-    onInfoClick: (Libro) -> Unit,
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = ROW_HORIZONTAL_PADDING, vertical = ROW_VERTICAL_PADDING),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = libro.titulo,
-                modifier = Modifier.width(TITLE_WIDTH),
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    lineBreak = LineBreak.Paragraph,
-                    hyphens = Hyphens.Auto
-                ),
-                softWrap = true,
-                textAlign = TextAlign.Center
-            )
-
-            Text(
-                text = libro.precio.toString(),
-                modifier = Modifier.width(AUTHOR_WIDTH),
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    lineBreak = LineBreak.Paragraph,
-                    hyphens = Hyphens.Auto
-                ),
-                softWrap = true,
-                textAlign = TextAlign.Center
-            )
-
-            Text(
-                text = "${libro.publicacion}",
-                modifier = Modifier.width(YEAR_WIDTH),
-                style = MaterialTheme.typography.bodyLarge,
-                softWrap = true,
-                textAlign = TextAlign.Center
-            )
-
-            Row(
-                modifier = Modifier.width(ACTIONS_WIDTH),
-                horizontalArrangement = Arrangement.End
-            ) {
-                IconButton(onClick = { onInfoClick(libro) }) {
-                    Icon(
-                        imageVector = Icons.Filled.Info,
-                        contentDescription = "Info libro"
-                    )
-                }
+                Text(text = libro.toString(), modifier = Modifier.padding(4.dp))
+                Divider()
             }
         }
     }

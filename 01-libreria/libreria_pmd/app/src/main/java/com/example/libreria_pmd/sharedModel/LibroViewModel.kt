@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.libreria.Libro
@@ -14,9 +15,8 @@ import kotlinx.coroutines.flow.forEach
 
 class LibroViewModel() : ViewModel() {
 
+    val listaLibros = mutableStateListOf<Libro>()
 
-    private val _listaLibros = MutableStateFlow<List<Libro>>(emptyList())
-    val listaLibros = _listaLibros.asStateFlow()
 
     // Estado para manejar errores visuales
     var errorMensaje by mutableStateOf<String?>(null)
@@ -71,17 +71,16 @@ class LibroViewModel() : ViewModel() {
         librosPrueba.forEach {
             MyLog.d(it.toString())
             MyLog.d("Es caro? ${it.esCaro().aRespuesta()}")
-            _listaLibros.value += it
+            listaLibros.add(it)
+            MyLog.d("prueba incluida: "+ it.toString())
         }
     }
 
     // Por ser flow cambia la forma de acceder a la lista
     suspend fun sumarPrecios():Int {
         var precioTotal = 0
-        _listaLibros.collect {
-            it.forEach {
-                precioTotal += it.precio
-            }
+        listaLibros.forEach {
+            precioTotal += it.precio
         }
         return precioTotal
     }
@@ -102,7 +101,7 @@ class LibroViewModel() : ViewModel() {
         }
         // creamos la instacia
         var libro:Libro = Libro(titulo,inPublicacion, inPrecio)
-        _listaLibros.value += libro
+        listaLibros.add(libro)
         onSuccess()
     }
 }
