@@ -1,19 +1,29 @@
 package com.example.libreria.ui.shared
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.libreria.Libro
 import com.example.libreria_pmd.MyLog
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.forEach
+
+enum class RadioTipo {
+    FISICO,
+    DIGITAL,
+}
 
 class LibroViewModel() : ViewModel() {
+
+    // para radiobutton
+    private val _radioTipo = mutableStateOf(RadioTipo.FISICO)
+    val radioTipo: State<RadioTipo> = _radioTipo
+    fun cambiarTipoLibro(nuevo: RadioTipo) {
+        _radioTipo.value = nuevo
+        MyLog.d("Radio update: ${nuevo.toString()}")
+    }
+    // FIN radiobutton
 
     val listaLibros = mutableStateListOf<Libro>()
 
@@ -93,11 +103,13 @@ class LibroViewModel() : ViewModel() {
             inPublicacion = publicacion.toInt()
         } catch (e : Exception) {
             errorMensaje = "La fecha no es un número cómo se espera"
+            return
         }
         try {
             inPrecio = precio.toInt()
         } catch (e : Exception) {
             errorMensaje = "El precio no es un número cómo se espera"
+            return
         }
         // creamos la instacia
         var libro:Libro = Libro(titulo,inPublicacion, inPrecio)
