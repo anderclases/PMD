@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.libreria.Libro
+import com.example.libreria.LibroDigital
 import com.example.libreria_pmd.MyLog
 
 enum class RadioTipo {
@@ -41,11 +42,11 @@ class LibroViewModel() : ViewModel() {
         if (errorMensaje != null) errorMensaje = null // Limpiar error al escribir
     }
 
-    var autor by mutableStateOf("")
+    var sizeArchivo by mutableStateOf("")
         private set
 
-    fun onAutorChanged(nuevoTexto: String) {
-        autor = nuevoTexto
+    fun onSizeChanged(nuevoTexto: String) {
+        sizeArchivo = nuevoTexto
         if (errorMensaje != null) errorMensaje = null
     }
 
@@ -67,7 +68,7 @@ class LibroViewModel() : ViewModel() {
 
     private fun limpiarFormulario() {
         titulo = ""
-        autor = ""
+        sizeArchivo = ""
         publicacion = ""
         errorMensaje = null
     }
@@ -99,6 +100,7 @@ class LibroViewModel() : ViewModel() {
         // validaciones y errores
         var inPublicacion = 0
         var inPrecio = 0
+        var inSizeArchivo = 0
         try {
             inPublicacion = publicacion.toInt()
         } catch (e : Exception) {
@@ -111,9 +113,20 @@ class LibroViewModel() : ViewModel() {
             errorMensaje = "El precio no es un número cómo se espera"
             return
         }
+        if(radioTipo.value == RadioTipo.DIGITAL) {
+            try {
+                inSizeArchivo = sizeArchivo.toInt()
+            } catch (e : Exception) {
+                errorMensaje = "El tamaño del archivo no es un número cómo se espera"
+                return
+            }
+            var libro: LibroDigital = LibroDigital(titulo,inPublicacion, inPrecio,inSizeArchivo,"PDF")
+            listaLibros.add(libro)
+        } else {
+            var libro:Libro = Libro(titulo,inPublicacion, inPrecio)
+            listaLibros.add(libro)
+        }
         // creamos la instacia
-        var libro:Libro = Libro(titulo,inPublicacion, inPrecio)
-        listaLibros.add(libro)
         onSuccess()
     }
 }

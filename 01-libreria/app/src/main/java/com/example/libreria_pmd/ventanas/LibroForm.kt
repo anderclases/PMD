@@ -53,6 +53,14 @@ fun LibroForm(
             placeholder = "Precio"
         )
 
+        if(viewModel.radioTipo.value == RadioTipo.DIGITAL) {
+            DefaultOutlinedTextField(
+                texto = viewModel.sizeArchivo,
+                onTextoChange = { nuevoTexto -> viewModel.onSizeChanged(nuevoTexto) },
+                placeholder = "Tamaño archivo"
+            )
+        }
+
         Row(verticalAlignment = Alignment.CenterVertically) {
             val tipoLibro by viewModel.radioTipo
             RadioButton(

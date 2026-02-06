@@ -35,9 +35,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun gestorVentanas(modifier: Modifier) {
-    val context = LocalContext.current
-
-
     val libroViewModel: LibroViewModel = viewModel()
 
     val navController = rememberNavController()
